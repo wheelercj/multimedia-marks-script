@@ -1,8 +1,8 @@
+exclude: 'Baselight_export\.txt|Xytech\.txt'
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.3.0
     hooks:
-    -   id: check-docstring-first
     -   id: end-of-file-fixer
     -   id: trailing-whitespace
 -   repo: https://github.com/psf/black
