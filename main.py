@@ -174,6 +174,30 @@ def split_baselight_line(line: str) -> tuple[str, list[str]]:
     return path, frame_numbers
 
 
+def split_flame_line(line: str) -> tuple[str, str, list[str]]:
+    """Splits a flame export file's line.
+
+    The line is split into a storage path, a location path, and raw frame numbers.
+    Assumes the line is either empty or contains a storage path, a location path, and
+    raw frame numbers. Assumes the storage path does not contain any spaces. There may
+    be instances of ``<err>``, ``<null>``, and/or empty strings mixed into the returned
+    frame numbers.
+    """
+    if not line:
+        return "", "", []
+    line_tokens = line.split(" ")
+    i = len(line_tokens)
+    for token in reversed(line_tokens):
+        if not token.isdigit() and token not in ("<err>", "<null>", ""):
+            break
+        i -= 1
+    frame_numbers: list[str] = line_tokens[i:]
+    storage_path, location_path = line_tokens[:i]
+    storage_path = storage_path.replace("\\", "/")
+    location_path = location_path.replace("\\", "/")
+    return storage_path, location_path, frame_numbers
+
+
 def clean_numbers(raw_frame_numbers: list[str]) -> list[int]:
     """Removes any non-numeric strings and converts the rest to ints."""
     return [
@@ -471,6 +495,34 @@ def test_split_baselight_line_with_windows_path() -> None:
     ) == (
         "C:/images1/starwars/reel1/VFX/Hydraulx",
         ["1251", "1252", "1253", "1260", "<err>", "1270", ""],
+    )
+
+
+def test_split_flame_line() -> None:
+    assert split_flame_line(
+        "/net/flame-archive Avatar/reel1/VFX/Hydraulx 1260 1261 1262 1267"
+    ) == (
+        "/net/flame-archive",
+        "Avatar/reel1/VFX/Hydraulx",
+        ["1260", "1261", "1262", "1267"],
+    )
+
+
+def test_split_flame_line_two_frames() -> None:
+    assert split_flame_line(
+        "/net/flame-archive Avatar/pickups/shot_5ab/1920x1080 9090 9091"
+    ) == (
+        "/net/flame-archive",
+        "Avatar/pickups/shot_5ab/1920x1080",
+        ["9090", "9091"],
+    )
+
+
+def test_split_flame_line_one_frame() -> None:
+    assert split_flame_line("/net/flame-archive Avatar/reel1/VFX/Framestore 6195") == (
+        "/net/flame-archive",
+        "Avatar/reel1/VFX/Framestore",
+        ["6195"],
     )
 
 
