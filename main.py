@@ -2,58 +2,101 @@ import argparse
 import csv
 import os
 import re
-import sys
+from datetime import datetime
+from io import FileIO
 from textwrap import dedent
+from typing import Callable
 
+import pymongo
 import pytest
+from pymongo.collection import Collection
+from pymongo.database import Database
 
 
 def init_argparse() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
-    parser.add_argument("-j", "--job", dest="job_folder", help="job folder to process")
-    parser.add_argument("-v", "--verbose", action="store_true", help="verbose output")
+    parser.add_argument(
+        "-f",
+        "--file",
+        type=argparse.FileType("r", encoding="utf-8"),
+        action="append",  # allow multiple files
+        dest="files",
+        help="Baselight or Flame export file. Can be used multiple times.",
+    )
+    parser.add_argument(
+        "-x",
+        "--xytech",
+        type=argparse.FileType("r", encoding="utf-8"),
+        help="Xytech file",
+    )
+    parser.add_argument(
+        "-o", "--output", choices=["CSV", "DB"], help="output destination"
+    )
+    parser.add_argument("--verbose", action="store_true", help="verbose console output")
     return parser
 
 
 def get_valid_args() -> argparse.Namespace:
     parser: argparse.ArgumentParser = init_argparse()
-    args: argparse.Namespace = parser.parse_args()
-    if args.job_folder is None:
-        print("Error: no job selected")
-        sys.exit(2)
+    args, unknown = parser.parse_known_args()
+    if unknown:
+        parser.error(
+            f"Unknown arguments: {unknown}"
+            "\nIf entering multiple files, use -f for each file."
+        )
+    if args.output is None:
+        parser.error("Output destination must be specified")
     return args
 
 
 def main() -> None:
     args: argparse.Namespace = get_valid_args()
+    output_destination: str = args.output
+    assert output_destination in ["CSV", "DB"]
     verbose: bool = args.verbose
-    job_folder: str = args.job_folder
-    if verbose:
-        print(f"{job_folder = }")
-
-    if verbose:
-        print("Reading files...")
-    baselight_file_path: str = os.path.join(job_folder, "Baselight_export.txt")
-    xytech_file_path: str = os.path.join(job_folder, "Xytech.txt")
-    if verbose:
-        print(f"{baselight_file_path = }")
-        print(f"{xytech_file_path = }")
-        print("Opening files...")
-    with open(baselight_file_path, "r") as baselight_file:
-        baselight_content: str = baselight_file.read()
-    with open(xytech_file_path, "r") as xytech_file:
-        xytech_content: str = xytech_file.read()
-    producer, operator, job, notes, xytech_paths = load_xytech_data(xytech_content)
+    work_file_paths: list[FileIO] = args.files  # Baselight and Flame files
+    xytech_file: FileIO = args.xytech
+    producer, operator, job, notes, xytech_paths = load_xytech_data(
+        str(xytech_file.read())
+    )
     if verbose:
         print(f"{producer = }")
         print(f"{operator = }")
         print(f"{job = }")
         print(f"{notes = }")
-        print(f"{xytech_paths = }")
+        print(f"{xytech_paths = }")  # the paths in the xytech file
         print(f"{len(xytech_paths) = }")
 
+    if output_destination == "CSV":
+        export_files_to_csv(
+            producer, operator, job, notes, work_file_paths, xytech_paths, verbose
+        )
+    elif output_destination == "DB":
+        export_files_to_db(work_file_paths, xytech_paths, verbose)
+    else:
+        raise NotImplementedError("Only CSV and DB outputs are supported")
+
+
+def get_file_date(file_name: str) -> str:
+    """Returns the date from a file name.
+
+    The last 8 digits of the file name before the file extension must be the date in the
+    format YYYYMMDD.
+    """
+    return file_name.rsplit(".", 1)[0][-8:]
+
+
+def export_files_to_csv(
+    producer: str,
+    operator: str,
+    job: str,
+    notes: str,
+    work_file_paths: list[FileIO],
+    xytech_paths: list[str],
+    verbose: bool,
+) -> None:
     if verbose:
-        print("Writing output...")
+        print("Writing output to output.csv")
     with open("output.csv", "w") as csv_file:
         csv_writer = csv.writer(
             csv_file,
@@ -65,24 +108,144 @@ def main() -> None:
         csv_writer.writerow([producer, operator, job, notes])
         csv_writer.writerow([])
         csv_writer.writerow([])
-        for line in baselight_content.splitlines():
-            if not line:
-                continue
-            raw_baselight_path, raw_frame_numbers = split_baselight_line(line)
+        for work_file_path in work_file_paths:
+            work_file_name: str = (
+                str(work_file_path.name).replace("\\", "/").split("/")[-1]
+            )
             if verbose:
-                print("-----")
-                print(f"{raw_baselight_path = }")
-                print(f"{raw_frame_numbers = }")
-            baselight_path: str = raw_baselight_path.replace("\\", "/").strip()
-            frame_ranges: list[str] = get_frame_ranges(clean_numbers(raw_frame_numbers))
-            for xytech_path in xytech_paths:
-                common_path: str = reversed_common_path([xytech_path, baselight_path])
-                if common_path.count("/") > 1:
-                    if verbose:
-                        print(f"{common_path = }")
-                    for frame_range in frame_ranges:
-                        csv_writer.writerow([xytech_path, frame_range])
-                    break
+                print(f"\t{work_file_name}")
+            machine, user_on_file, file_date_and_extension = work_file_name.split("_")
+            file_date: datetime = datetime.strptime(
+                file_date_and_extension.split(".")[0], "%Y%m%d"
+            )
+            if verbose:
+                print(f"\t\t{machine = }")
+                print(f"\t\t{user_on_file = }")
+                print(f"\t\t{file_date = }")
+            work_file_content: str = str(work_file_path.read())
+            export_file_to_csv_or_db(
+                machine,
+                work_file_content,
+                user_on_file,
+                file_date,
+                xytech_paths,
+                verbose,
+                insert_row_into_csv,
+                csv_writer.writerow,
+            )
+
+
+def export_files_to_db(
+    work_file_paths: list[FileIO],
+    xytech_paths: list[str],
+    verbose: bool,
+) -> None:
+    if verbose:
+        print("Writing output to database")
+    script_user: str = os.getlogin()
+    mongo_client = pymongo.MongoClient("mongodb://localhost:27017/")
+    db: Database = mongo_client["mydatabase"]
+    jobs_collection: Collection = db["jobs"]
+    frames_collection: Collection = db["frames"]
+    for work_file_path in work_file_paths:
+        work_file_name: str = str(work_file_path.name).replace("\\", "/").split("/")[-1]
+        if verbose:
+            print(f"\t{work_file_name}")
+        machine, user_on_file, file_date_and_extension = work_file_name.split("_")
+        file_date: datetime = datetime.strptime(
+            file_date_and_extension.split(".")[0], "%Y%m%d"
+        )
+        if verbose:
+            print(f"\t\t{machine = }")
+            print(f"\t\t{user_on_file = }")
+            print(f"\t\t{file_date = }")
+        jobs_collection.insert_one(
+            {
+                "script_user": script_user,
+                "machine": machine,
+                "user_on_file": user_on_file,
+                "file_date": file_date,
+                "submitted_date": datetime.now(),
+            }
+        )
+        work_file_content: str = str(work_file_path.read())
+        export_file_to_csv_or_db(
+            machine,
+            work_file_content,
+            user_on_file,
+            file_date,
+            xytech_paths,
+            verbose,
+            insert_row_into_db,
+            frames_collection.insert_one,
+        )
+
+
+def export_file_to_csv_or_db(
+    machine: str,
+    work_file_content: str,
+    user_on_file: str,
+    file_date: datetime,
+    xytech_paths: list[str],
+    verbose: bool,
+    insert_row_wrapper: Callable,
+    insert_row: Callable,
+) -> None:
+    for line in work_file_content.splitlines():
+        if not line:
+            continue
+        if machine == "Baselight":
+            path, raw_frame_numbers = split_baselight_line(line)
+        elif machine == "Flame":
+            path, raw_frame_numbers = split_flame_line(line)
+        else:
+            raise ValueError(f"Unknown machine: {machine}")
+        if verbose:
+            print("-----")
+            print(f"{path = }")
+            print(f"{raw_frame_numbers = }")
+        frame_ranges: list[str] = get_frame_ranges(clean_numbers(raw_frame_numbers))
+        for xytech_path in xytech_paths:
+            common_path: str = reversed_common_path([xytech_path, path])
+            if common_path.count("/") > 1:
+                if verbose:
+                    print(f"{common_path = }")
+                for frame_range in frame_ranges:
+                    insert_row_wrapper(
+                        insert_row,
+                        user_on_file,
+                        file_date,
+                        xytech_path,
+                        frame_range,
+                    )
+                break
+
+
+def insert_row_into_db(
+    insert_one: Callable,
+    user_on_file: str,
+    file_date: str,
+    location: str,
+    frame_range: str,
+) -> None:
+    insert_one(
+        {
+            "user_on_file": user_on_file,
+            "file_date": file_date,
+            "location": location,
+            "frame_range": frame_range,
+        }
+    )
+
+
+def insert_row_into_csv(
+    writerow: Callable,
+    user_on_file: str,
+    file_date: str,
+    location: str,
+    frame_range: str,
+) -> None:
+    writerow([location, frame_range])
 
 
 def load_xytech_data(file_content: str) -> tuple[str, str, str, str, list[str]]:
@@ -150,7 +313,7 @@ def reversed_common_path(paths: list[str]) -> str:
 
 
 def split_baselight_line(line: str) -> tuple[str, list[str]]:
-    """Splits a baselight export file's line into a path and raw frame numbers.
+    """Splits a Baselight export file's line into a path and raw frame numbers.
 
     Assumes the line is either empty or contains a path and raw frame numbers. There may
     be instances of ``<err>``, ``<null>``, and/or empty strings mixed into the returned
@@ -169,22 +332,21 @@ def split_baselight_line(line: str) -> tuple[str, list[str]]:
         if not token.isdigit() and token not in ("<err>", "<null>", ""):
             break
         i -= 1
-    path: str = " ".join(line_tokens[:i]).replace("\\", "/")
     frame_numbers: list[str] = line_tokens[i:]
+    path: str = " ".join(line_tokens[:i]).replace("\\", "/").strip()
     return path, frame_numbers
 
 
-def split_flame_line(line: str) -> tuple[str, str, list[str]]:
-    """Splits a flame export file's line.
+def split_flame_line(line: str) -> tuple[str, list[str]]:
+    """Splits a Flame export file's line into a path and raw frame numbers.
 
-    The line is split into a storage path, a location path, and raw frame numbers.
     Assumes the line is either empty or contains a storage path, a location path, and
     raw frame numbers. Assumes the storage path does not contain any spaces. There may
     be instances of ``<err>``, ``<null>``, and/or empty strings mixed into the returned
     frame numbers.
     """
     if not line:
-        return "", "", []
+        return "", []
     line_tokens = line.split(" ")
     i = len(line_tokens)
     for token in reversed(line_tokens):
@@ -193,9 +355,8 @@ def split_flame_line(line: str) -> tuple[str, str, list[str]]:
         i -= 1
     frame_numbers: list[str] = line_tokens[i:]
     storage_path, location_path = line_tokens[:i]
-    storage_path = storage_path.replace("\\", "/")
-    location_path = location_path.replace("\\", "/")
-    return storage_path, location_path, frame_numbers
+    path = os.path.join(storage_path, location_path).replace("\\", "/").strip()
+    return path, frame_numbers
 
 
 def clean_numbers(raw_frame_numbers: list[str]) -> list[int]:
@@ -372,8 +533,7 @@ def test_split_flame_line() -> None:
     assert split_flame_line(
         "/net/flame-archive Avatar/reel1/VFX/Hydraulx 1260 1261 1262 1267"
     ) == (
-        "/net/flame-archive",
-        "Avatar/reel1/VFX/Hydraulx",
+        "/net/flame-archive/Avatar/reel1/VFX/Hydraulx",
         ["1260", "1261", "1262", "1267"],
     )
 
@@ -382,16 +542,14 @@ def test_split_flame_line_two_frames() -> None:
     assert split_flame_line(
         "/net/flame-archive Avatar/pickups/shot_5ab/1920x1080 9090 9091"
     ) == (
-        "/net/flame-archive",
-        "Avatar/pickups/shot_5ab/1920x1080",
+        "/net/flame-archive/Avatar/pickups/shot_5ab/1920x1080",
         ["9090", "9091"],
     )
 
 
 def test_split_flame_line_one_frame() -> None:
     assert split_flame_line("/net/flame-archive Avatar/reel1/VFX/Framestore 6195") == (
-        "/net/flame-archive",
-        "Avatar/reel1/VFX/Framestore",
+        "/net/flame-archive/Avatar/reel1/VFX/Framestore",
         ["6195"],
     )
 
@@ -416,3 +574,15 @@ def test_get_frame_ranges_one_number() -> None:
 
 def test_get_frame_ranges_two_numbers() -> None:
     assert get_frame_ranges([1, 3]) == ["1", "3"]
+
+
+def test_get_file_date_baselight() -> None:
+    assert get_file_date("Baselight_GLopez_20230325.txt") == "20230325"
+
+
+def test_get_file_date_flame() -> None:
+    assert get_file_date("Flame_DFlowers_20230323.txt") == "20230323"
+
+
+def test_get_file_date_xytech() -> None:
+    assert get_file_date("Xytech_20230323.txt") == "20230323"
