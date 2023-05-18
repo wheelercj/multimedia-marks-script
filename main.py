@@ -198,6 +198,7 @@ def export_files_to_xls(
             verbose,
             insert_row_into_xls,
             ws.append,  # type: ignore
+            24,
         )
     wb.save(output_file_path)
 
@@ -229,6 +230,7 @@ def export_file_to_csv_or_db_or_xls(
     verbose: bool,
     insert_row_wrapper: Callable,
     insert_row: Callable,
+    fps: int = 24,
 ) -> None:
     for line in work_file_content.splitlines():
         if not line:
@@ -256,6 +258,7 @@ def export_file_to_csv_or_db_or_xls(
                         file_date,
                         xytech_path,
                         frame_range,
+                        fps,
                     )
                 break
 
@@ -266,6 +269,7 @@ def insert_row_into_db(
     file_date: str,
     location: str,
     frame_range: str,
+    fps: int,
 ) -> None:
     insert_one(
         {
@@ -283,6 +287,7 @@ def insert_row_into_csv(
     file_date: str,
     location: str,
     frame_range: str,
+    fps: int,
 ) -> None:
     writerow([location, frame_range])
 
@@ -293,8 +298,17 @@ def insert_row_into_xls(
     file_date: str,
     location: str,
     frame_range: str,
+    fps: int,
 ) -> None:
-    append([location, frame_range])
+    if "-" in frame_range:
+        start_frame, end_frame = frame_range.split("-")
+        start_timecode = frame_to_timecode(start_frame, fps)
+        end_timecode = frame_to_timecode(end_frame, fps)
+        timecode_range: str = f"{start_timecode} - {end_timecode}"
+        append([location, frame_range, timecode_range])
+    else:
+        timecode = frame_to_timecode(frame_range, fps)
+        append([location, frame_range, timecode])
 
 
 def load_xytech_data(file_content: str) -> tuple[str, str, str, str, list[str]]:
@@ -447,6 +461,36 @@ def get_frame_ranges(frame_numbers: list[int]) -> list[str]:
     else:
         frame_ranges.append(f"{start}-{end}")
     return frame_ranges
+
+
+def frame_to_timecode(frame_number: int | str, fps: int) -> str:
+    """Converts a frame number to a timecode string.
+
+    Timecodes are in the format hh:mm:ss:ff.
+
+    Examples
+    --------
+    35 -> "00:00:01:11"
+    1569 -> "00:01:05:09"
+    14000 -> "00:09:43:08"
+    """
+    frame_number = int(frame_number)
+    if frame_number < 0:
+        raise ValueError("negative frame")
+    second: int = frame_number // fps
+    frame_number %= fps
+    minute: int = second // 60
+    second %= 60
+    hour: int = minute // 60
+    minute %= 60
+    if hour >= 24:
+        raise NotImplementedError("frame over 24 hours")
+    return f"{ε(hour)}:{ε(minute)}:{ε(second)}:{ε(frame_number)}"
+
+
+def ε(n: int) -> str:
+    """Converts an integer to a string and zfills to a width of two."""
+    return str(n).zfill(2)
 
 
 if __name__ == "__main__":
