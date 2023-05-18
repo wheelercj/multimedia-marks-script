@@ -7,6 +7,7 @@ from io import FileIO
 from textwrap import dedent
 from typing import Callable
 
+import openpyxl
 import pymongo
 import pytest
 from pymongo.collection import Collection
@@ -30,7 +31,7 @@ def init_argparse() -> argparse.ArgumentParser:
         help="Xytech file",
     )
     parser.add_argument(
-        "-o", "--output", choices=["CSV", "DB"], help="output destination"
+        "-o", "--output", choices=["CSV", "DB", "XLS"], help="output destination"
     )
     parser.add_argument("--verbose", action="store_true", help="verbose console output")
     return parser
@@ -52,7 +53,7 @@ def get_valid_args() -> argparse.Namespace:
 def main() -> None:
     args: argparse.Namespace = get_valid_args()
     output_destination: str = args.output
-    assert output_destination in ["CSV", "DB"]
+    assert output_destination in ["CSV", "DB", "XLS"]
     verbose: bool = args.verbose
     work_file_paths: list[FileIO] = args.files  # Baselight and Flame files
     xytech_file: FileIO = args.xytech
@@ -73,8 +74,12 @@ def main() -> None:
         )
     elif output_destination == "DB":
         export_files_to_db(work_file_paths, xytech_paths, verbose)
+    elif output_destination == "XLS":
+        export_files_to_xls(
+            producer, operator, job, notes, work_file_paths, xytech_paths, verbose
+        )
     else:
-        raise NotImplementedError("Only CSV and DB outputs are supported")
+        raise NotImplementedError("Only CSV, DB, and XLS outputs are supported")
 
 
 def get_file_date(file_name: str) -> str:
@@ -91,7 +96,7 @@ def export_files_to_csv(
     operator: str,
     job: str,
     notes: str,
-    work_file_paths: list[FileIO],
+    work_files: list[FileIO],
     xytech_paths: list[str],
     verbose: bool,
 ) -> None:
@@ -108,22 +113,11 @@ def export_files_to_csv(
         csv_writer.writerow([producer, operator, job, notes])
         csv_writer.writerow([])
         csv_writer.writerow([])
-        for work_file_path in work_file_paths:
-            work_file_name: str = (
-                str(work_file_path.name).replace("\\", "/").split("/")[-1]
+        for work_file in work_files:
+            machine, user_on_file, file_date, work_file_content = get_work_file_data(
+                work_file, verbose
             )
-            if verbose:
-                print(f"\t{work_file_name}")
-            machine, user_on_file, file_date_and_extension = work_file_name.split("_")
-            file_date: datetime = datetime.strptime(
-                file_date_and_extension.split(".")[0], "%Y%m%d"
-            )
-            if verbose:
-                print(f"\t\t{machine = }")
-                print(f"\t\t{user_on_file = }")
-                print(f"\t\t{file_date = }")
-            work_file_content: str = str(work_file_path.read())
-            export_file_to_csv_or_db(
+            export_file_to_csv_or_db_or_xls(
                 machine,
                 work_file_content,
                 user_on_file,
@@ -136,7 +130,7 @@ def export_files_to_csv(
 
 
 def export_files_to_db(
-    work_file_paths: list[FileIO],
+    work_files: list[FileIO],
     xytech_paths: list[str],
     verbose: bool,
 ) -> None:
@@ -147,18 +141,10 @@ def export_files_to_db(
     db: Database = mongo_client["mydatabase"]
     jobs_collection: Collection = db["jobs"]
     frames_collection: Collection = db["frames"]
-    for work_file_path in work_file_paths:
-        work_file_name: str = str(work_file_path.name).replace("\\", "/").split("/")[-1]
-        if verbose:
-            print(f"\t{work_file_name}")
-        machine, user_on_file, file_date_and_extension = work_file_name.split("_")
-        file_date: datetime = datetime.strptime(
-            file_date_and_extension.split(".")[0], "%Y%m%d"
+    for work_file in work_files:
+        machine, user_on_file, file_date, work_file_content = get_work_file_data(
+            work_file, verbose
         )
-        if verbose:
-            print(f"\t\t{machine = }")
-            print(f"\t\t{user_on_file = }")
-            print(f"\t\t{file_date = }")
         jobs_collection.insert_one(
             {
                 "script_user": script_user,
@@ -168,8 +154,7 @@ def export_files_to_db(
                 "submitted_date": datetime.now(),
             }
         )
-        work_file_content: str = str(work_file_path.read())
-        export_file_to_csv_or_db(
+        export_file_to_csv_or_db_or_xls(
             machine,
             work_file_content,
             user_on_file,
@@ -181,7 +166,61 @@ def export_files_to_db(
         )
 
 
-def export_file_to_csv_or_db(
+def export_files_to_xls(
+    producer: str,
+    operator: str,
+    job: str,
+    notes: str,
+    work_files: list[FileIO],
+    xytech_paths: list[str],
+    verbose: bool,
+) -> None:
+    output_file_path: str = "output.xls"
+    if verbose:
+        print("Writing output to output.xls")
+
+    wb: openpyxl.Workbook = openpyxl.Workbook()
+    ws = wb.active
+    assert ws is not None
+    ws.append([producer, operator, job, notes])  # type: ignore
+    ws.append([])  # type: ignore
+    ws.append([])  # type: ignore
+    for work_file in work_files:
+        machine, user_on_file, file_date, work_file_content = get_work_file_data(
+            work_file, verbose
+        )
+        export_file_to_csv_or_db_or_xls(
+            machine,
+            work_file_content,
+            user_on_file,
+            file_date,
+            xytech_paths,
+            verbose,
+            insert_row_into_xls,
+            ws.append,  # type: ignore
+        )
+    wb.save(output_file_path)
+
+
+def get_work_file_data(
+    work_file: FileIO, verbose: bool
+) -> tuple[str, str, datetime, str]:
+    work_file_name: str = str(work_file.name).replace("\\", "/").split("/")[-1]
+    if verbose:
+        print(f"\t{work_file_name}")
+    machine, user_on_file, file_date_and_extension = work_file_name.split("_")
+    file_date: datetime = datetime.strptime(
+        file_date_and_extension.split(".")[0], "%Y%m%d"
+    )
+    if verbose:
+        print(f"\t\t{machine = }")
+        print(f"\t\t{user_on_file = }")
+        print(f"\t\t{file_date = }")
+    work_file_content: str = str(work_file.read())
+    return machine, user_on_file, file_date, work_file_content
+
+
+def export_file_to_csv_or_db_or_xls(
     machine: str,
     work_file_content: str,
     user_on_file: str,
@@ -246,6 +285,16 @@ def insert_row_into_csv(
     frame_range: str,
 ) -> None:
     writerow([location, frame_range])
+
+
+def insert_row_into_xls(
+    append: Callable,
+    user_on_file: str,
+    file_date: str,
+    location: str,
+    frame_range: str,
+) -> None:
+    append([location, frame_range])
 
 
 def load_xytech_data(file_content: str) -> tuple[str, str, str, str, list[str]]:
