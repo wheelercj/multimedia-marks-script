@@ -1,17 +1,50 @@
+"""This script solves all of your problems.
+
+Requires ffmpeg to be installed.
+
+ffmpeg guide:
+https://ostechnix.com/20-ffmpeg-commands-beginners/
+
+mongodb guide:
+https://www.w3schools.com/python/python_mongodb_getstarted.asp
+
+each document of the jobs collection:
+{
+    "script_user": str,
+    "machine": str,
+    "user_on_file": str,
+    "file_date": datetime,
+    "submitted_date": datetime,
+}
+
+each document of the frames collection:
+{
+    "user_on_file": str,
+    "file_date": datetime,
+    "location": str,
+    "frame_range": str,
+}
+"""
 import argparse
 import csv
 import os
 import re
+import subprocess
 from datetime import datetime
+from io import BytesIO
 from io import FileIO
 from textwrap import dedent
+from typing import Any
 from typing import Callable
 
 import openpyxl
 import pymongo
 import pytest
+from openpyxl.drawing.image import Image as openpyxlImage
+from PIL import Image as PILImage
 from pymongo.collection import Collection
 from pymongo.database import Database
+from tqdm import tqdm
 
 
 def init_argparse() -> argparse.ArgumentParser:
@@ -31,6 +64,13 @@ def init_argparse() -> argparse.ArgumentParser:
         help="Xytech file",
     )
     parser.add_argument(
+        "-p",
+        "--process",
+        type=str,
+        dest="process_file_path",
+        help="path of the video file to process",
+    )
+    parser.add_argument(
         "-o", "--output", choices=["CSV", "DB", "XLS"], help="output destination"
     )
     parser.add_argument("--verbose", action="store_true", help="verbose console output")
@@ -47,6 +87,8 @@ def get_valid_args() -> argparse.Namespace:
         )
     if args.output is None:
         parser.error("Output destination must be specified")
+    if args.output == "XLS" and args.process_file_path is None:
+        parser.error("Process file must be specified for XLS output")
     return args
 
 
@@ -57,29 +99,32 @@ def main() -> None:
     verbose: bool = args.verbose
     work_file_paths: list[FileIO] = args.files  # Baselight and Flame files
     xytech_file: FileIO = args.xytech
-    producer, operator, job, notes, xytech_paths = load_xytech_data(
-        str(xytech_file.read())
-    )
+    process_file_path: str | None = args.process_file_path
     if verbose:
-        print(f"{producer = }")
-        print(f"{operator = }")
-        print(f"{job = }")
-        print(f"{notes = }")
-        print(f"{xytech_paths = }")  # the paths in the xytech file
-        print(f"{len(xytech_paths) = }")
+        print(f"{process_file_path = }")
 
-    if output_destination == "CSV":
-        export_files_to_csv(
-            producer, operator, job, notes, work_file_paths, xytech_paths, verbose
-        )
-    elif output_destination == "DB":
-        export_files_to_db(work_file_paths, xytech_paths, verbose)
-    elif output_destination == "XLS":
-        export_files_to_xls(
-            producer, operator, job, notes, work_file_paths, xytech_paths, verbose
-        )
+    if output_destination == "XLS":
+        assert process_file_path is not None
+        export_files_to_xls(process_file_path, verbose)
     else:
-        raise NotImplementedError("Only CSV, DB, and XLS outputs are supported")
+        producer, operator, job, notes, xytech_paths = load_xytech_data(
+            str(xytech_file.read())
+        )
+        if verbose:
+            print(f"{producer = }")
+            print(f"{operator = }")
+            print(f"{job = }")
+            print(f"{notes = }")
+            print(f"{xytech_paths = }")  # the paths in the xytech file
+            print(f"{len(xytech_paths) = }")
+        if output_destination == "CSV":
+            export_files_to_csv(
+                producer, operator, job, notes, work_file_paths, xytech_paths, verbose
+            )
+        elif output_destination == "DB":
+            export_files_to_db(work_file_paths, xytech_paths, verbose)
+        else:
+            raise NotImplementedError("Programmer error: invalid output format.")
 
 
 def get_file_date(file_name: str) -> str:
@@ -117,7 +162,7 @@ def export_files_to_csv(
             machine, user_on_file, file_date, work_file_content = get_work_file_data(
                 work_file, verbose
             )
-            export_file_to_csv_or_db_or_xls(
+            export_file_to_csv_or_db(
                 machine,
                 work_file_content,
                 user_on_file,
@@ -154,7 +199,7 @@ def export_files_to_db(
                 "submitted_date": datetime.now(),
             }
         )
-        export_file_to_csv_or_db_or_xls(
+        export_file_to_csv_or_db(
             machine,
             work_file_content,
             user_on_file,
@@ -166,41 +211,90 @@ def export_files_to_db(
         )
 
 
-def export_files_to_xls(
-    producer: str,
-    operator: str,
-    job: str,
-    notes: str,
-    work_files: list[FileIO],
-    xytech_paths: list[str],
-    verbose: bool,
-) -> None:
-    output_file_path: str = "output.xls"
+def export_files_to_xls(process_file_path: str, verbose: bool) -> None:
     if verbose:
         print("Writing output to output.xls")
+
+    video_frame_count, fps = get_video_data(process_file_path)
+    if verbose:
+        print(f"{video_frame_count = }")
+        print(f"{fps = }")
+
+    mongo_client = pymongo.MongoClient("mongodb://localhost:27017/")
+    db: Database = mongo_client["mydatabase"]
+    frames_collection: Collection = db["frames"]
+
+    documents = frames_collection.find()
+    db_data: list[tuple[str, str]] = [
+        (document["location"], document["frame_range"])
+        for document in documents
+        if "-" in document["frame_range"]  # ignore individual frames
+        and int(document["frame_range"].split("-")[1]) <= video_frame_count
+        # ignore frames out of the range of the video
+    ]
+    if verbose:
+        print(f"{len(db_data) = }")
+        # print(f"{db_data = }")
+
+    video_end_timecode: str = frame_to_timecode(video_frame_count, fps)
+    if verbose:
+        print(f"{video_end_timecode = }")
 
     wb: openpyxl.Workbook = openpyxl.Workbook()
     ws = wb.active
     assert ws is not None
-    ws.append([producer, operator, job, notes])  # type: ignore
-    ws.append([])  # type: ignore
-    ws.append([])  # type: ignore
-    for work_file in work_files:
-        machine, user_on_file, file_date, work_file_content = get_work_file_data(
-            work_file, verbose
-        )
-        export_file_to_csv_or_db_or_xls(
-            machine,
-            work_file_content,
-            user_on_file,
-            file_date,
-            xytech_paths,
-            verbose,
-            insert_row_into_xls,
-            ws.append,  # type: ignore
-            24,
-        )
-    wb.save(output_file_path)
+
+    ws.column_dimensions["A"].width = 80  # type: ignore
+    ws.column_dimensions["B"].width = 15  # type: ignore
+    ws.column_dimensions["C"].width = 25  # type: ignore
+    ws.column_dimensions["D"].width = 15  # type: ignore
+    i = 1
+    for location, frame_range in tqdm(db_data):
+        time_range: str = frame_range_to_time_range(frame_range, fps)
+        middle_frame_number: int = get_middle_frame_number(frame_range)
+        middle_frame: openpyxlImage = get_frame(process_file_path, middle_frame_number)
+        if verbose:
+            print(f"\n{location = }")
+            print(f"{frame_range = }")
+            print(f"{time_range = }")
+            print(f"{middle_frame_number = }")
+        ws.append([location, frame_range, time_range])  # type: ignore
+        ws.add_image(middle_frame, f"D{ws.max_row}")  # type: ignore
+        ws.row_dimensions[i].height = 60  # type: ignore
+        i += 1
+    wb.save("output.xls")
+
+
+def get_middle_frame_number(frame_range: str) -> int:
+    start_frame_number_s, end_frame_number_s = frame_range.split("-")
+    start_frame_number = int(start_frame_number_s)
+    end_frame_number = int(end_frame_number_s)
+    return start_frame_number + (end_frame_number - start_frame_number) // 2
+
+
+def get_frame(video_file_path: str, frame_number: int) -> openpyxlImage:
+    command = [
+        "ffmpeg",
+        "-i",
+        video_file_path,
+        "-vf",
+        f"select=gte(n\\,{frame_number})",
+        "-vframes",
+        "1",
+        "-f",
+        "image2pipe",
+        "-c:v",
+        "bmp",
+        "-",
+    ]
+    result: subprocess.CompletedProcess = subprocess.run(
+        command, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    )
+    if result.returncode != 0:
+        raise Exception(result.stderr)
+    image = PILImage.open(BytesIO(result.stdout))
+    image.thumbnail((96, 74))
+    return openpyxlImage(image)
 
 
 def get_work_file_data(
@@ -221,7 +315,7 @@ def get_work_file_data(
     return machine, user_on_file, file_date, work_file_content
 
 
-def export_file_to_csv_or_db_or_xls(
+def export_file_to_csv_or_db(
     machine: str,
     work_file_content: str,
     user_on_file: str,
@@ -230,7 +324,6 @@ def export_file_to_csv_or_db_or_xls(
     verbose: bool,
     insert_row_wrapper: Callable,
     insert_row: Callable,
-    fps: int = 24,
 ) -> None:
     for line in work_file_content.splitlines():
         if not line:
@@ -258,7 +351,6 @@ def export_file_to_csv_or_db_or_xls(
                         file_date,
                         xytech_path,
                         frame_range,
-                        fps,
                     )
                 break
 
@@ -269,7 +361,6 @@ def insert_row_into_db(
     file_date: str,
     location: str,
     frame_range: str,
-    fps: int,
 ) -> None:
     insert_one(
         {
@@ -287,28 +378,8 @@ def insert_row_into_csv(
     file_date: str,
     location: str,
     frame_range: str,
-    fps: int,
 ) -> None:
     writerow([location, frame_range])
-
-
-def insert_row_into_xls(
-    append: Callable,
-    user_on_file: str,
-    file_date: str,
-    location: str,
-    frame_range: str,
-    fps: int,
-) -> None:
-    if "-" in frame_range:
-        start_frame, end_frame = frame_range.split("-")
-        start_timecode = frame_to_timecode(start_frame, fps)
-        end_timecode = frame_to_timecode(end_frame, fps)
-        timecode_range: str = f"{start_timecode} - {end_timecode}"
-        append([location, frame_range, timecode_range])
-    else:
-        timecode = frame_to_timecode(frame_range, fps)
-        append([location, frame_range, timecode])
 
 
 def load_xytech_data(file_content: str) -> tuple[str, str, str, str, list[str]]:
@@ -463,6 +534,13 @@ def get_frame_ranges(frame_numbers: list[int]) -> list[str]:
     return frame_ranges
 
 
+def frame_range_to_time_range(frame_range: str, fps: int) -> str:
+    start_frame, end_frame = frame_range.split("-")
+    start_timecode: str = frame_to_timecode(int(start_frame), fps)
+    end_timecode: str = frame_to_timecode(int(end_frame), fps)
+    return f"{start_timecode} - {end_timecode}"
+
+
 def frame_to_timecode(frame_number: int | str, fps: int) -> str:
     """Converts a frame number to a timecode string.
 
@@ -491,6 +569,27 @@ def frame_to_timecode(frame_number: int | str, fps: int) -> str:
 def ε(n: int) -> str:
     """Converts an integer to a string and zfills to a width of two."""
     return str(n).zfill(2)
+
+
+def get_video_data(video_path: str) -> tuple[int, int]:
+    ffmpeg_command: str = f"ffmpeg -i {video_path} -map 0:v:0 -c copy -f null -"
+    ffmpeg_output: subprocess.CompletedProcess = subprocess.run(
+        ffmpeg_command,
+        shell=True,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    # print(f"{ffmpeg_output = }")
+    frame_matches: list[Any] = re.findall(r"frame=\s*(\d+)", ffmpeg_output.stderr)
+    if not frame_matches:
+        raise ValueError("Could not find frame count in ffmpeg output.")
+    frame_count: int = int(frame_matches[-1])
+    fps_match: re.Match[Any] | None = re.search(r", (\d+) fps,", ffmpeg_output.stderr)
+    if not fps_match:
+        raise ValueError("Could not find fps in ffmpeg output.")
+    fps: int = int(fps_match.group(1))
+    return frame_count, fps
 
 
 if __name__ == "__main__":

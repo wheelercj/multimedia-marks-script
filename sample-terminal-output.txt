@@ -1,0 +1,624 @@
+(venv) C:/Users/chris/Documents/chrono/2023.2 Spring/comp 467 - multimedia systems design/project
+> py main.py --output XLS --process .\twitch_nft_demo.mp4 --verbose
+process_file_path = '.\\twitch_nft_demo.mp4'
+Writing output to output.xls
+video_frame_count = 5919
+fps = 60
+len(db_data) = 123
+video_end_timecode = '00:01:38:39'
+  0%|                                                                                                          | 0/123 [00:00<?, ?it/s]
+location = '/ddnsata5/production/Avatar/reel1/partA/1920x1080'
+frame_range = '32-34'
+time_range = '00:00:00:32 - 00:00:00:34'
+middle_frame_number = 33
+  1%|▊                                                                                                 | 1/123 [00:00<00:20,  5.95it/s]
+location = '/ddnsata5/production/Avatar/reel1/partA/1920x1080'
+frame_range = '67-69'
+time_range = '00:00:01:07 - 00:00:01:09'
+middle_frame_number = 68
+  2%|█▌                                                                                                | 2/123 [00:00<00:21,  5.57it/s]
+location = '/ddnsata5/production/Avatar/reel1/partA/1920x1080'
+frame_range = '122-123'
+time_range = '00:00:02:02 - 00:00:02:03'
+middle_frame_number = 122
+  2%|██▍                                                                                               | 3/123 [00:00<00:24,  4.98it/s]
+location = '/ddnsata5/production/Avatar/reel1/partA/1920x1080'
+frame_range = '1111-1112'
+time_range = '00:00:18:31 - 00:00:18:32'
+middle_frame_number = 1111
+  3%|███▏                                                                                              | 4/123 [00:01<00:59,  1.99it/s]
+location = '/ddnsata5/production/Avatar/reel1/partA/1920x1080'
+frame_range = '1201-1205'
+time_range = '00:00:20:01 - 00:00:20:05'
+middle_frame_number = 1203
+  4%|███▉                                                                                              | 5/123 [00:02<01:22,  1.44it/s]
+location = '/ddnsata5/production/Avatar/reel1/partA/1920x1080'
+frame_range = '1211-1214'
+time_range = '00:00:20:11 - 00:00:20:14'
+middle_frame_number = 1212
+  5%|████▊                                                                                             | 6/123 [00:03<01:35,  1.22it/s]
+location = '/ddnsata7/production/Avatar/reel1/VFX/Hydraulx'
+frame_range = '1251-1253'
+time_range = '00:00:20:51 - 00:00:20:53'
+middle_frame_number = 1252
+  6%|█████▌                                                                                            | 7/123 [00:04<01:45,  1.10it/s]
+location = '/ddnsata7/production/Avatar/reel1/VFX/Hydraulx'
+frame_range = '1270-1272'
+time_range = '00:00:21:10 - 00:00:21:12'
+middle_frame_number = 1271
+  7%|██████▎                                                                                           | 8/123 [00:05<01:50,  1.04it/s]
+location = '/ddnsata5/production/Avatar/reel1/partA/1920x1080'
+frame_range = '1302-1303'
+time_range = '00:00:21:42 - 00:00:21:43'
+middle_frame_number = 1302
+  7%|███████▏                                                                                          | 9/123 [00:06<01:54,  1.01s/it]
+location = '/ddnsata5/production/Avatar/reel1/partA/1920x1080'
+frame_range = '5000-5002'
+time_range = '00:01:23:20 - 00:01:23:22'
+middle_frame_number = 5001
+  8%|███████▉                                                                                         | 10/123 [00:10<03:35,  1.91s/it]
+location = '/ddnsata4/production/Avatar/pickups/shot_1ab/1920x1080'
+frame_range = '5010-5014'
+time_range = '00:01:23:30 - 00:01:23:34'
+middle_frame_number = 5012
+  9%|████████▋                                                                                        | 11/123 [00:14<04:43,  2.53s/it]
+location = '/ddnsata7/production/Avatar/reel1/VFX/Hydraulx'
+frame_range = '1260-1262'
+time_range = '00:00:21:00 - 00:00:21:02'
+middle_frame_number = 1261
+ 10%|█████████▍                                                                                       | 12/123 [00:15<03:52,  2.09s/it]
+location = '/ddnsata4/production/Avatar/reel2/partA/1920x1080'
+frame_range = '300-303'
+time_range = '00:00:05:00 - 00:00:05:03'
+middle_frame_number = 301
+ 11%|██████████▎                                                                                      | 13/123 [00:16<02:52,  1.57s/it]
+location = '/ddnsata4/production/Avatar/reel2/partA/1920x1080'
+frame_range = '1111-1113'
+time_range = '00:00:18:31 - 00:00:18:33'
+middle_frame_number = 1112
+ 11%|███████████                                                                                      | 14/123 [00:17<02:31,  1.39s/it]
+location = '/ddnsata4/production/Avatar/reel2/partA/1920x1080'
+frame_range = '1400-1403'
+time_range = '00:00:23:20 - 00:00:23:23'
+middle_frame_number = 1401
+ 12%|███████████▊                                                                                     | 15/123 [00:18<02:23,  1.33s/it]
+location = '/ddnsata4/production/Avatar/reel2/partA/1920x1080'
+frame_range = '1405-1408'
+time_range = '00:00:23:25 - 00:00:23:28'
+middle_frame_number = 1406
+ 13%|████████████▌                                                                                    | 16/123 [00:19<02:18,  1.29s/it]
+location = '/ddnsata3/production/Avatar/pickups/shot_2ab/1920x1080'
+frame_range = '1501-1504'
+time_range = '00:00:25:01 - 00:00:25:04'
+middle_frame_number = 1502
+ 14%|█████████████▍                                                                                   | 17/123 [00:20<02:15,  1.28s/it]
+location = '/ddnsata9/production/Avatar/reel2/VFX/AnimalLogic'
+frame_range = '1637-1639'
+time_range = '00:00:27:17 - 00:00:27:19'
+middle_frame_number = 1638
+ 15%|██████████████▏                                                                                  | 18/123 [00:22<02:17,  1.31s/it]
+location = '/ddnsata8/production/Avatar/reel2/VFX/Hydraulx'
+frame_range = '1800-1801'
+time_range = '00:00:30:00 - 00:00:30:01'
+middle_frame_number = 1800
+ 15%|██████████████▉                                                                                  | 19/123 [00:23<02:22,  1.37s/it]
+location = '/ddnsata8/production/Avatar/reel2/VFX/Hydraulx'
+frame_range = '1911-1913'
+time_range = '00:00:31:51 - 00:00:31:53'
+middle_frame_number = 1912
+ 16%|███████████████▊                                                                                 | 20/123 [00:25<02:28,  1.44s/it]
+location = '/ddnsata2/production/Avatar/reel2/partB/1920x1080'
+frame_range = '4555-4557'
+time_range = '00:01:15:55 - 00:01:15:57'
+middle_frame_number = 4556
+ 17%|████████████████▌                                                                                | 21/123 [00:28<03:32,  2.08s/it]
+location = '/ddnsata1/production/Avatar/reel2/VFX/Framestore'
+frame_range = '5122-5125'
+time_range = '00:01:25:22 - 00:01:25:25'
+middle_frame_number = 5123
+ 18%|█████████████████▎                                                                               | 22/123 [00:32<04:30,  2.68s/it]
+location = '/ddnsata1/production/Avatar/reel2/VFX/Framestore'
+frame_range = '5466-5468'
+time_range = '00:01:31:06 - 00:01:31:08'
+middle_frame_number = 5467
+ 19%|██████████████████▏                                                                              | 23/123 [00:37<05:16,  3.16s/it]
+location = '/ddnsata4/production/Avatar/reel3/partA/1920x1080'
+frame_range = '134-137'
+time_range = '00:00:02:14 - 00:00:02:17'
+middle_frame_number = 135
+ 20%|██████████████████▉                                                                              | 24/123 [00:37<03:46,  2.29s/it]
+location = '/ddnsata4/production/Avatar/reel3/partA/1920x1080'
+frame_range = '712-713'
+time_range = '00:00:11:52 - 00:00:11:53'
+middle_frame_number = 712
+ 20%|███████████████████▋                                                                             | 25/123 [00:38<02:56,  1.80s/it]
+location = '/ddnsata1/production/Avatar/pickups/shot_3ab/1920x1080'
+frame_range = '1045-1046'
+time_range = '00:00:17:25 - 00:00:17:26'
+middle_frame_number = 1045
+ 21%|████████████████████▌                                                                            | 26/123 [00:39<02:29,  1.54s/it]
+location = '/ddnsata1/production/Avatar/pickups/shot_3ab/1920x1080'
+frame_range = '1166-1168'
+time_range = '00:00:19:26 - 00:00:19:28'
+middle_frame_number = 1167
+ 22%|█████████████████████▎                                                                           | 27/123 [00:40<02:13,  1.39s/it]
+location = '/ddnsata7/production/Avatar/reel3/VFX/Hydraulx'
+frame_range = '3045-3046'
+time_range = '00:00:50:45 - 00:00:50:46'
+middle_frame_number = 3045
+ 23%|██████████████████████                                                                           | 28/123 [00:42<02:41,  1.70s/it]
+location = '/ddnsata3/production/Avatar/reel1/partA/1920x1080'
+frame_range = '200-203'
+time_range = '00:00:03:20 - 00:00:03:23'
+middle_frame_number = 201
+ 24%|██████████████████████▊                                                                          | 29/123 [00:42<01:59,  1.28s/it]
+location = '/ddnsata3/production/Avatar/reel1/partA/1920x1080'
+frame_range = '422-424'
+time_range = '00:00:07:02 - 00:00:07:04'
+middle_frame_number = 423
+ 24%|███████████████████████▋                                                                         | 30/123 [00:43<01:35,  1.03s/it]
+location = '/ddnsata2/production/Avatar/reel5/partA/1920x1080'
+frame_range = '202-204'
+time_range = '00:00:03:22 - 00:00:03:24'
+middle_frame_number = 203
+ 25%|████████████████████████▍                                                                        | 31/123 [00:43<01:14,  1.24it/s]
+location = '/ddnsata2/production/Avatar/reel5/partA/1920x1080'
+frame_range = '356-362'
+time_range = '00:00:05:56 - 00:00:06:02'
+middle_frame_number = 359
+ 26%|█████████████████████████▏                                                                       | 32/123 [00:44<01:02,  1.45it/s]
+location = '/ddnsata2/production/Avatar/reel5/partA/1920x1080'
+frame_range = '401-403'
+time_range = '00:00:06:41 - 00:00:06:43'
+middle_frame_number = 402
+ 27%|██████████████████████████                                                                       | 33/123 [00:44<00:55,  1.62it/s]
+location = '/ddnsata2/production/Avatar/reel5/partA/1920x1080'
+frame_range = '467-468'
+time_range = '00:00:07:47 - 00:00:07:48'
+middle_frame_number = 467
+ 28%|██████████████████████████▊                                                                      | 34/123 [00:44<00:51,  1.72it/s]
+location = '/ddnsata2/production/Avatar/reel5/partA/1920x1080'
+frame_range = '561-562'
+time_range = '00:00:09:21 - 00:00:09:22'
+middle_frame_number = 561
+ 28%|███████████████████████████▌                                                                     | 35/123 [00:45<00:50,  1.74it/s]
+location = '/ddnsata2/production/Avatar/reel5/partA/1920x1080'
+frame_range = '601-608'
+time_range = '00:00:10:01 - 00:00:10:08'
+middle_frame_number = 604
+ 29%|████████████████████████████▍                                                                    | 36/123 [00:46<00:50,  1.72it/s]
+location = '/ddnsata9/production/Avatar/reel5/VFX/Hydraulx'
+frame_range = '701-704'
+time_range = '00:00:11:41 - 00:00:11:44'
+middle_frame_number = 702
+ 30%|█████████████████████████████▏                                                                   | 37/123 [00:46<00:51,  1.65it/s]
+location = '/ddnsata5/production/Avatar/reel5/VFX/Framestore'
+frame_range = '888-897'
+time_range = '00:00:14:48 - 00:00:14:57'
+middle_frame_number = 892
+ 31%|█████████████████████████████▉                                                                   | 38/123 [00:47<00:56,  1.50it/s]
+location = '/ddnsata11/production/Avatar/pickups/shot_5ab/1920x1080'
+frame_range = '1044-1047'
+time_range = '00:00:17:24 - 00:00:17:27'
+middle_frame_number = 1045
+ 32%|██████████████████████████████▊                                                                  | 39/123 [00:48<01:02,  1.34it/s]
+location = '/ddnsata6/production/Avatar/reel5/partB/1920x1080'
+frame_range = '4120-4121'
+time_range = '00:01:08:40 - 00:01:08:41'
+middle_frame_number = 4120
+ 33%|███████████████████████████████▌                                                                 | 40/123 [00:51<02:04,  1.50s/it]
+location = '/ddnsata6/production/Avatar/reel5/partB/1920x1080'
+frame_range = '4123-4124'
+time_range = '00:01:08:43 - 00:01:08:44'
+middle_frame_number = 4123
+ 33%|████████████████████████████████▎                                                                | 41/123 [00:55<02:47,  2.04s/it]
+location = '/ddnsata5/production/Avatar/reel1/partA/1920x1080'
+frame_range = '32-34'
+time_range = '00:00:00:32 - 00:00:00:34'
+middle_frame_number = 33
+ 34%|█████████████████████████████████                                                                | 42/123 [00:55<01:59,  1.48s/it]
+location = '/ddnsata5/production/Avatar/reel1/partA/1920x1080'
+frame_range = '67-69'
+time_range = '00:00:01:07 - 00:00:01:09'
+middle_frame_number = 68
+ 35%|█████████████████████████████████▉                                                               | 43/123 [00:55<01:27,  1.09s/it]
+location = '/ddnsata5/production/Avatar/reel1/partA/1920x1080'
+frame_range = '122-123'
+time_range = '00:00:02:02 - 00:00:02:03'
+middle_frame_number = 122
+ 36%|██████████████████████████████████▋                                                              | 44/123 [00:55<01:06,  1.20it/s]
+location = '/ddnsata5/production/Avatar/reel1/partA/1920x1080'
+frame_range = '1111-1112'
+time_range = '00:00:18:31 - 00:00:18:32'
+middle_frame_number = 1111
+ 37%|███████████████████████████████████▍                                                             | 45/123 [00:56<01:08,  1.14it/s]
+location = '/ddnsata5/production/Avatar/reel1/partA/1920x1080'
+frame_range = '1201-1205'
+time_range = '00:00:20:01 - 00:00:20:05'
+middle_frame_number = 1203
+ 37%|████████████████████████████████████▎                                                            | 46/123 [00:57<01:11,  1.08it/s]
+location = '/ddnsata5/production/Avatar/reel1/partA/1920x1080'
+frame_range = '1211-1214'
+time_range = '00:00:20:11 - 00:00:20:14'
+middle_frame_number = 1212
+ 38%|█████████████████████████████████████                                                            | 47/123 [00:58<01:13,  1.04it/s]
+location = '/ddnsata7/production/Avatar/reel1/VFX/Hydraulx'
+frame_range = '1251-1253'
+time_range = '00:00:20:51 - 00:00:20:53'
+middle_frame_number = 1252
+ 39%|█████████████████████████████████████▊                                                           | 48/123 [00:59<01:15,  1.01s/it]
+location = '/ddnsata7/production/Avatar/reel1/VFX/Hydraulx'
+frame_range = '1270-1272'
+time_range = '00:00:21:10 - 00:00:21:12'
+middle_frame_number = 1271
+ 40%|██████████████████████████████████████▋                                                          | 49/123 [01:00<01:16,  1.04s/it]
+location = '/ddnsata5/production/Avatar/reel1/partA/1920x1080'
+frame_range = '1302-1303'
+time_range = '00:00:21:42 - 00:00:21:43'
+middle_frame_number = 1302
+ 41%|███████████████████████████████████████▍                                                         | 50/123 [01:02<01:17,  1.06s/it]
+location = '/ddnsata5/production/Avatar/reel1/partA/1920x1080'
+frame_range = '5000-5002'
+time_range = '00:01:23:20 - 00:01:23:22'
+middle_frame_number = 5001
+ 41%|████████████████████████████████████████▏                                                        | 51/123 [01:06<02:19,  1.94s/it]
+location = '/ddnsata4/production/Avatar/pickups/shot_1ab/1920x1080'
+frame_range = '5010-5014'
+time_range = '00:01:23:30 - 00:01:23:34'
+middle_frame_number = 5012
+ 42%|█████████████████████████████████████████                                                        | 52/123 [01:10<03:01,  2.56s/it]
+location = '/ddnsata7/production/Avatar/reel1/VFX/Hydraulx'
+frame_range = '1260-1262'
+time_range = '00:00:21:00 - 00:00:21:02'
+middle_frame_number = 1261
+ 43%|█████████████████████████████████████████▊                                                       | 53/123 [01:11<02:28,  2.12s/it]
+location = '/ddnsata4/production/Avatar/reel2/partA/1920x1080'
+frame_range = '300-303'
+time_range = '00:00:05:00 - 00:00:05:03'
+middle_frame_number = 301
+ 44%|██████████████████████████████████████████▌                                                      | 54/123 [01:11<01:49,  1.59s/it]
+location = '/ddnsata4/production/Avatar/reel2/partA/1920x1080'
+frame_range = '1111-1113'
+time_range = '00:00:18:31 - 00:00:18:33'
+middle_frame_number = 1112
+ 45%|███████████████████████████████████████████▎                                                     | 55/123 [01:12<01:35,  1.41s/it]
+location = '/ddnsata4/production/Avatar/reel2/partA/1920x1080'
+frame_range = '1400-1403'
+time_range = '00:00:23:20 - 00:00:23:23'
+middle_frame_number = 1401
+ 46%|████████████████████████████████████████████▏                                                    | 56/123 [01:13<01:29,  1.34s/it]
+location = '/ddnsata4/production/Avatar/reel2/partA/1920x1080'
+frame_range = '1405-1408'
+time_range = '00:00:23:25 - 00:00:23:28'
+middle_frame_number = 1406
+ 46%|████████████████████████████████████████████▉                                                    | 57/123 [01:14<01:26,  1.31s/it]
+location = '/ddnsata3/production/Avatar/pickups/shot_2ab/1920x1080'
+frame_range = '1501-1504'
+time_range = '00:00:25:01 - 00:00:25:04'
+middle_frame_number = 1502
+ 47%|█████████████████████████████████████████████▋                                                   | 58/123 [01:16<01:24,  1.30s/it]
+location = '/ddnsata9/production/Avatar/reel2/VFX/AnimalLogic'
+frame_range = '1637-1639'
+time_range = '00:00:27:17 - 00:00:27:19'
+middle_frame_number = 1638
+ 48%|██████████████████████████████████████████████▌                                                  | 59/123 [01:17<01:24,  1.32s/it]
+location = '/ddnsata8/production/Avatar/reel2/VFX/Hydraulx'
+frame_range = '1800-1801'
+time_range = '00:00:30:00 - 00:00:30:01'
+middle_frame_number = 1800
+ 49%|███████████████████████████████████████████████▎                                                 | 60/123 [01:19<01:26,  1.38s/it]
+location = '/ddnsata8/production/Avatar/reel2/VFX/Hydraulx'
+frame_range = '1911-1913'
+time_range = '00:00:31:51 - 00:00:31:53'
+middle_frame_number = 1912
+ 50%|████████████████████████████████████████████████                                                 | 61/123 [01:20<01:29,  1.44s/it]
+location = '/ddnsata2/production/Avatar/reel2/partB/1920x1080'
+frame_range = '4555-4557'
+time_range = '00:01:15:55 - 00:01:15:57'
+middle_frame_number = 4556
+ 50%|████████████████████████████████████████████████▉                                                | 62/123 [01:24<02:07,  2.09s/it]
+location = '/ddnsata1/production/Avatar/reel2/VFX/Framestore'
+frame_range = '5122-5125'
+time_range = '00:01:25:22 - 00:01:25:25'
+middle_frame_number = 5123
+ 51%|█████████████████████████████████████████████████▋                                               | 63/123 [01:28<02:41,  2.69s/it]
+location = '/ddnsata1/production/Avatar/reel2/VFX/Framestore'
+frame_range = '5466-5468'
+time_range = '00:01:31:06 - 00:01:31:08'
+middle_frame_number = 5467
+ 52%|██████████████████████████████████████████████████▍                                              | 64/123 [01:32<03:07,  3.18s/it]
+location = '/ddnsata4/production/Avatar/reel3/partA/1920x1080'
+frame_range = '134-137'
+time_range = '00:00:02:14 - 00:00:02:17'
+middle_frame_number = 135
+ 53%|███████████████████████████████████████████████████▎                                             | 65/123 [01:32<02:13,  2.30s/it]
+location = '/ddnsata4/production/Avatar/reel3/partA/1920x1080'
+frame_range = '712-713'
+time_range = '00:00:11:52 - 00:00:11:53'
+middle_frame_number = 712
+ 54%|████████████████████████████████████████████████████                                             | 66/123 [01:33<01:43,  1.81s/it]
+location = '/ddnsata1/production/Avatar/pickups/shot_3ab/1920x1080'
+frame_range = '1045-1046'
+time_range = '00:00:17:25 - 00:00:17:26'
+middle_frame_number = 1045
+ 54%|████████████████████████████████████████████████████▊                                            | 67/123 [01:34<01:26,  1.55s/it]
+location = '/ddnsata1/production/Avatar/pickups/shot_3ab/1920x1080'
+frame_range = '1166-1168'
+time_range = '00:00:19:26 - 00:00:19:28'
+middle_frame_number = 1167
+ 55%|█████████████████████████████████████████████████████▋                                           | 68/123 [01:35<01:16,  1.39s/it]
+location = '/ddnsata7/production/Avatar/reel3/VFX/Hydraulx'
+frame_range = '3045-3046'
+time_range = '00:00:50:45 - 00:00:50:46'
+middle_frame_number = 3045
+ 56%|██████████████████████████████████████████████████████▍                                          | 69/123 [01:38<01:32,  1.71s/it]
+location = '/ddnsata3/production/Avatar/reel1/partA/1920x1080'
+frame_range = '200-203'
+time_range = '00:00:03:20 - 00:00:03:23'
+middle_frame_number = 201
+ 57%|███████████████████████████████████████████████████████▏                                         | 70/123 [01:38<01:08,  1.29s/it]
+location = '/ddnsata3/production/Avatar/reel1/partA/1920x1080'
+frame_range = '422-424'
+time_range = '00:00:07:02 - 00:00:07:04'
+middle_frame_number = 423
+ 58%|███████████████████████████████████████████████████████▉                                         | 71/123 [01:38<00:53,  1.04s/it]
+location = '/ddnsata2/production/Avatar/reel5/partA/1920x1080'
+frame_range = '202-204'
+time_range = '00:00:03:22 - 00:00:03:24'
+middle_frame_number = 203
+ 59%|████████████████████████████████████████████████████████▊                                        | 72/123 [01:39<00:41,  1.23it/s]
+location = '/ddnsata2/production/Avatar/reel5/partA/1920x1080'
+frame_range = '356-362'
+time_range = '00:00:05:56 - 00:00:06:02'
+middle_frame_number = 359
+ 59%|█████████████████████████████████████████████████████████▌                                       | 73/123 [01:39<00:34,  1.45it/s]
+location = '/ddnsata2/production/Avatar/reel5/partA/1920x1080'
+frame_range = '401-403'
+time_range = '00:00:06:41 - 00:00:06:43'
+middle_frame_number = 402
+ 60%|██████████████████████████████████████████████████████████▎                                      | 74/123 [01:39<00:30,  1.62it/s]
+location = '/ddnsata2/production/Avatar/reel5/partA/1920x1080'
+frame_range = '467-468'
+time_range = '00:00:07:47 - 00:00:07:48'
+middle_frame_number = 467
+ 61%|███████████████████████████████████████████████████████████▏                                     | 75/123 [01:40<00:27,  1.72it/s]
+location = '/ddnsata2/production/Avatar/reel5/partA/1920x1080'
+frame_range = '561-562'
+time_range = '00:00:09:21 - 00:00:09:22'
+middle_frame_number = 561
+ 62%|███████████████████████████████████████████████████████████▉                                     | 76/123 [01:40<00:26,  1.75it/s]
+location = '/ddnsata2/production/Avatar/reel5/partA/1920x1080'
+frame_range = '601-608'
+time_range = '00:00:10:01 - 00:00:10:08'
+middle_frame_number = 604
+ 63%|████████████████████████████████████████████████████████████▋                                    | 77/123 [01:41<00:26,  1.72it/s]
+location = '/ddnsata9/production/Avatar/reel5/VFX/Hydraulx'
+frame_range = '701-704'
+time_range = '00:00:11:41 - 00:00:11:44'
+middle_frame_number = 702
+ 63%|█████████████████████████████████████████████████████████████▌                                   | 78/123 [01:42<00:27,  1.65it/s]
+location = '/ddnsata5/production/Avatar/reel5/VFX/Framestore'
+frame_range = '888-897'
+time_range = '00:00:14:48 - 00:00:14:57'
+middle_frame_number = 892
+ 64%|██████████████████████████████████████████████████████████████▎                                  | 79/123 [01:43<00:29,  1.49it/s]
+location = '/ddnsata11/production/Avatar/pickups/shot_5ab/1920x1080'
+frame_range = '1044-1047'
+time_range = '00:00:17:24 - 00:00:17:27'
+middle_frame_number = 1045
+ 65%|███████████████████████████████████████████████████████████████                                  | 80/123 [01:43<00:32,  1.34it/s]
+location = '/ddnsata6/production/Avatar/reel5/partB/1920x1080'
+frame_range = '4120-4121'
+time_range = '00:01:08:40 - 00:01:08:41'
+middle_frame_number = 4120
+ 66%|███████████████████████████████████████████████████████████████▉                                 | 81/123 [01:47<01:03,  1.51s/it]
+location = '/ddnsata6/production/Avatar/reel5/partB/1920x1080'
+frame_range = '4123-4124'
+time_range = '00:01:08:43 - 00:01:08:44'
+middle_frame_number = 4123
+ 67%|████████████████████████████████████████████████████████████████▋                                | 82/123 [01:50<01:23,  2.04s/it]
+location = '/ddnsata5/production/Avatar/reel1/partA/1920x1080'
+frame_range = '32-34'
+time_range = '00:00:00:32 - 00:00:00:34'
+middle_frame_number = 33
+ 67%|█████████████████████████████████████████████████████████████████▍                               | 83/123 [01:50<00:59,  1.48s/it]
+location = '/ddnsata5/production/Avatar/reel1/partA/1920x1080'
+frame_range = '67-69'
+time_range = '00:00:01:07 - 00:00:01:09'
+middle_frame_number = 68
+ 68%|██████████████████████████████████████████████████████████████████▏                              | 84/123 [01:50<00:42,  1.09s/it]
+location = '/ddnsata5/production/Avatar/reel1/partA/1920x1080'
+frame_range = '122-123'
+time_range = '00:00:02:02 - 00:00:02:03'
+middle_frame_number = 122
+ 69%|███████████████████████████████████████████████████████████████████                              | 85/123 [01:51<00:31,  1.20it/s]
+location = '/ddnsata5/production/Avatar/reel1/partA/1920x1080'
+frame_range = '1111-1112'
+time_range = '00:00:18:31 - 00:00:18:32'
+middle_frame_number = 1111
+ 70%|███████████████████████████████████████████████████████████████████▊                             | 86/123 [01:52<00:32,  1.14it/s]
+location = '/ddnsata5/production/Avatar/reel1/partA/1920x1080'
+frame_range = '1201-1205'
+time_range = '00:00:20:01 - 00:00:20:05'
+middle_frame_number = 1203
+ 71%|████████████████████████████████████████████████████████████████████▌                            | 87/123 [01:53<00:33,  1.07it/s]
+location = '/ddnsata5/production/Avatar/reel1/partA/1920x1080'
+frame_range = '1211-1214'
+time_range = '00:00:20:11 - 00:00:20:14'
+middle_frame_number = 1212
+ 72%|█████████████████████████████████████████████████████████████████████▍                           | 88/123 [01:54<00:33,  1.03it/s]
+location = '/ddnsata7/production/Avatar/reel1/VFX/Hydraulx'
+frame_range = '1251-1253'
+time_range = '00:00:20:51 - 00:00:20:53'
+middle_frame_number = 1252
+ 72%|██████████████████████████████████████████████████████████████████████▏                          | 89/123 [01:55<00:34,  1.01s/it]
+location = '/ddnsata7/production/Avatar/reel1/VFX/Hydraulx'
+frame_range = '1270-1272'
+time_range = '00:00:21:10 - 00:00:21:12'
+middle_frame_number = 1271
+ 73%|██████████████████████████████████████████████████████████████████████▉                          | 90/123 [01:56<00:34,  1.04s/it]
+location = '/ddnsata5/production/Avatar/reel1/partA/1920x1080'
+frame_range = '1302-1303'
+time_range = '00:00:21:42 - 00:00:21:43'
+middle_frame_number = 1302
+ 74%|███████████████████████████████████████████████████████████████████████▊                         | 91/123 [01:57<00:34,  1.06s/it]
+location = '/ddnsata5/production/Avatar/reel1/partA/1920x1080'
+frame_range = '5000-5002'
+time_range = '00:01:23:20 - 00:01:23:22'
+middle_frame_number = 5001
+ 75%|████████████████████████████████████████████████████████████████████████▌                        | 92/123 [02:01<01:01,  1.97s/it]
+location = '/ddnsata4/production/Avatar/pickups/shot_1ab/1920x1080'
+frame_range = '5010-5014'
+time_range = '00:01:23:30 - 00:01:23:34'
+middle_frame_number = 5012
+ 76%|█████████████████████████████████████████████████████████████████████████▎                       | 93/123 [02:05<01:17,  2.58s/it]
+location = '/ddnsata7/production/Avatar/reel1/VFX/Hydraulx'
+frame_range = '1260-1262'
+time_range = '00:00:21:00 - 00:00:21:02'
+middle_frame_number = 1261
+ 76%|██████████████████████████████████████████████████████████████████████████▏                      | 94/123 [02:06<01:01,  2.13s/it]
+location = '/ddnsata4/production/Avatar/reel2/partA/1920x1080'
+frame_range = '300-303'
+time_range = '00:00:05:00 - 00:00:05:03'
+middle_frame_number = 301
+ 77%|██████████████████████████████████████████████████████████████████████████▉                      | 95/123 [02:07<00:44,  1.60s/it]
+location = '/ddnsata4/production/Avatar/reel2/partA/1920x1080'
+frame_range = '1111-1113'
+time_range = '00:00:18:31 - 00:00:18:33'
+middle_frame_number = 1112
+ 78%|███████████████████████████████████████████████████████████████████████████▋                     | 96/123 [02:08<00:38,  1.42s/it]
+location = '/ddnsata4/production/Avatar/reel2/partA/1920x1080'
+frame_range = '1400-1403'
+time_range = '00:00:23:20 - 00:00:23:23'
+middle_frame_number = 1401
+ 79%|████████████████████████████████████████████████████████████████████████████▍                    | 97/123 [02:09<00:35,  1.35s/it]
+location = '/ddnsata4/production/Avatar/reel2/partA/1920x1080'
+frame_range = '1405-1408'
+time_range = '00:00:23:25 - 00:00:23:28'
+middle_frame_number = 1406
+ 80%|█████████████████████████████████████████████████████████████████████████████▎                   | 98/123 [02:10<00:32,  1.31s/it]
+location = '/ddnsata3/production/Avatar/pickups/shot_2ab/1920x1080'
+frame_range = '1501-1504'
+time_range = '00:00:25:01 - 00:00:25:04'
+middle_frame_number = 1502
+ 80%|██████████████████████████████████████████████████████████████████████████████                   | 99/123 [02:11<00:31,  1.30s/it]
+location = '/ddnsata9/production/Avatar/reel2/VFX/AnimalLogic'
+frame_range = '1637-1639'
+time_range = '00:00:27:17 - 00:00:27:19'
+middle_frame_number = 1638
+ 81%|██████████████████████████████████████████████████████████████████████████████                  | 100/123 [02:13<00:30,  1.33s/it]
+location = '/ddnsata8/production/Avatar/reel2/VFX/Hydraulx'
+frame_range = '1800-1801'
+time_range = '00:00:30:00 - 00:00:30:01'
+middle_frame_number = 1800
+ 82%|██████████████████████████████████████████████████████████████████████████████▊                 | 101/123 [02:14<00:30,  1.39s/it]
+location = '/ddnsata8/production/Avatar/reel2/VFX/Hydraulx'
+frame_range = '1911-1913'
+time_range = '00:00:31:51 - 00:00:31:53'
+middle_frame_number = 1912
+ 83%|███████████████████████████████████████████████████████████████████████████████▌                | 102/123 [02:16<00:30,  1.45s/it]
+location = '/ddnsata2/production/Avatar/reel2/partB/1920x1080'
+frame_range = '4555-4557'
+time_range = '00:01:15:55 - 00:01:15:57'
+middle_frame_number = 4556
+ 84%|████████████████████████████████████████████████████████████████████████████████▍               | 103/123 [02:19<00:42,  2.10s/it]
+location = '/ddnsata1/production/Avatar/reel2/VFX/Framestore'
+frame_range = '5122-5125'
+time_range = '00:01:25:22 - 00:01:25:25'
+middle_frame_number = 5123
+ 85%|█████████████████████████████████████████████████████████████████████████████████▏              | 104/123 [02:24<00:51,  2.70s/it]
+location = '/ddnsata1/production/Avatar/reel2/VFX/Framestore'
+frame_range = '5466-5468'
+time_range = '00:01:31:06 - 00:01:31:08'
+middle_frame_number = 5467
+ 85%|█████████████████████████████████████████████████████████████████████████████████▉              | 105/123 [02:28<00:57,  3.20s/it]
+location = '/ddnsata4/production/Avatar/reel3/partA/1920x1080'
+frame_range = '134-137'
+time_range = '00:00:02:14 - 00:00:02:17'
+middle_frame_number = 135
+ 86%|██████████████████████████████████████████████████████████████████████████████████▋             | 106/123 [02:28<00:39,  2.31s/it]
+location = '/ddnsata4/production/Avatar/reel3/partA/1920x1080'
+frame_range = '712-713'
+time_range = '00:00:11:52 - 00:00:11:53'
+middle_frame_number = 712
+ 87%|███████████████████████████████████████████████████████████████████████████████████▌            | 107/123 [02:29<00:29,  1.82s/it]
+location = '/ddnsata1/production/Avatar/pickups/shot_3ab/1920x1080'
+frame_range = '1045-1046'
+time_range = '00:00:17:25 - 00:00:17:26'
+middle_frame_number = 1045
+ 88%|████████████████████████████████████████████████████████████████████████████████████▎           | 108/123 [02:30<00:23,  1.56s/it]
+location = '/ddnsata1/production/Avatar/pickups/shot_3ab/1920x1080'
+frame_range = '1166-1168'
+time_range = '00:00:19:26 - 00:00:19:28'
+middle_frame_number = 1167
+ 89%|█████████████████████████████████████████████████████████████████████████████████████           | 109/123 [02:31<00:19,  1.39s/it]
+location = '/ddnsata7/production/Avatar/reel3/VFX/Hydraulx'
+frame_range = '3045-3046'
+time_range = '00:00:50:45 - 00:00:50:46'
+middle_frame_number = 3045
+ 89%|█████████████████████████████████████████████████████████████████████████████████████▊          | 110/123 [02:33<00:22,  1.71s/it]
+location = '/ddnsata3/production/Avatar/reel1/partA/1920x1080'
+frame_range = '200-203'
+time_range = '00:00:03:20 - 00:00:03:23'
+middle_frame_number = 201
+ 90%|██████████████████████████████████████████████████████████████████████████████████████▋         | 111/123 [02:33<00:15,  1.28s/it]
+location = '/ddnsata3/production/Avatar/reel1/partA/1920x1080'
+frame_range = '422-424'
+time_range = '00:00:07:02 - 00:00:07:04'
+middle_frame_number = 423
+ 91%|███████████████████████████████████████████████████████████████████████████████████████▍        | 112/123 [02:34<00:11,  1.04s/it]
+location = '/ddnsata2/production/Avatar/reel5/partA/1920x1080'
+frame_range = '202-204'
+time_range = '00:00:03:22 - 00:00:03:24'
+middle_frame_number = 203
+ 92%|████████████████████████████████████████████████████████████████████████████████████████▏       | 113/123 [02:34<00:08,  1.22it/s]
+location = '/ddnsata2/production/Avatar/reel5/partA/1920x1080'
+frame_range = '356-362'
+time_range = '00:00:05:56 - 00:00:06:02'
+middle_frame_number = 359
+ 93%|████████████████████████████████████████████████████████████████████████████████████████▉       | 114/123 [02:35<00:06,  1.43it/s]
+location = '/ddnsata2/production/Avatar/reel5/partA/1920x1080'
+frame_range = '401-403'
+time_range = '00:00:06:41 - 00:00:06:43'
+middle_frame_number = 402
+ 93%|█████████████████████████████████████████████████████████████████████████████████████████▊      | 115/123 [02:35<00:04,  1.60it/s]
+location = '/ddnsata2/production/Avatar/reel5/partA/1920x1080'
+frame_range = '467-468'
+time_range = '00:00:07:47 - 00:00:07:48'
+middle_frame_number = 467
+ 94%|██████████████████████████████████████████████████████████████████████████████████████████▌     | 116/123 [02:36<00:04,  1.72it/s]
+location = '/ddnsata2/production/Avatar/reel5/partA/1920x1080'
+frame_range = '561-562'
+time_range = '00:00:09:21 - 00:00:09:22'
+middle_frame_number = 561
+ 95%|███████████████████████████████████████████████████████████████████████████████████████████▎    | 117/123 [02:36<00:03,  1.73it/s]
+location = '/ddnsata2/production/Avatar/reel5/partA/1920x1080'
+frame_range = '601-608'
+time_range = '00:00:10:01 - 00:00:10:08'
+middle_frame_number = 604
+ 96%|████████████████████████████████████████████████████████████████████████████████████████████    | 118/123 [02:37<00:02,  1.71it/s]
+location = '/ddnsata9/production/Avatar/reel5/VFX/Hydraulx'
+frame_range = '701-704'
+time_range = '00:00:11:41 - 00:00:11:44'
+middle_frame_number = 702
+ 97%|████████████████████████████████████████████████████████████████████████████████████████████▉   | 119/123 [02:37<00:02,  1.64it/s]
+location = '/ddnsata5/production/Avatar/reel5/VFX/Framestore'
+frame_range = '888-897'
+time_range = '00:00:14:48 - 00:00:14:57'
+middle_frame_number = 892
+ 98%|█████████████████████████████████████████████████████████████████████████████████████████████▋  | 120/123 [02:38<00:02,  1.49it/s]
+location = '/ddnsata11/production/Avatar/pickups/shot_5ab/1920x1080'
+frame_range = '1044-1047'
+time_range = '00:00:17:24 - 00:00:17:27'
+middle_frame_number = 1045
+ 98%|██████████████████████████████████████████████████████████████████████████████████████████████▍ | 121/123 [02:39<00:01,  1.33it/s]
+location = '/ddnsata6/production/Avatar/reel5/partB/1920x1080'
+frame_range = '4120-4121'
+time_range = '00:01:08:40 - 00:01:08:41'
+middle_frame_number = 4120
+ 99%|███████████████████████████████████████████████████████████████████████████████████████████████▏| 122/123 [02:42<00:01,  1.51s/it]
+location = '/ddnsata6/production/Avatar/reel5/partB/1920x1080'
+frame_range = '4123-4124'
+time_range = '00:01:08:43 - 00:01:08:44'
+middle_frame_number = 4123
+100%|████████████████████████████████████████████████████████████████████████████████████████████████| 123/123 [02:46<00:00,  1.35s/it]
